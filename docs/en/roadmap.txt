@@ -1,0 +1,41 @@
+rustcore
+	core: contact object
+		definition
+		cap
+			definition
+			json serilization
+			save and load
+				flutter bridge
+				path management
+			memory list empower
+			extension management
+				save and load bridge
+				net repository
+			properities management
+		json serilization
+	database
+	storation
+			flutter bridge
+			path management
+		database operation
+	file format transfer
+		vcd
+		csv
+		excel
+	cross-platform sync
+		net stream protocal
+		p2p connection
+		sync protocal
+	events
+		read and show the contacts
+		contacts operation
+flutter
+	io
+		file management
+			rust bridge interface
+		database storation
+	ui
+		mobile ui
+		pc ui
+	features
+		i18n

@@ -1,0 +1,22 @@
+{
+	"@@locale": "en",
+	"contactBox": "Contact Box",
+	"@contactBox": {
+		"description": "The name of the app."
+	},
+	"contactList": "Contact List",
+	"@contactList": {
+		"description": "The title on the top of the home page."
+	},
+	"contactCount": "{count, plural, zero{No contacts yet} one{1 contact in total} other{# contacts in total}}",
+	"@contactCount": {
+		"description": "Show how may contacts the user has added, on the bottom of the home page.",
+		"placeholders": {
+			"count": {}
+		}
+	},
+	"errReadingFromSharedPreferences": "Error when reading from `shared_preferences`",
+	"@errReadingFromSharedPreferences": {
+		"description": "`shared_preferences` stores the settings of the app. When building the MaterialApp, it should be read."
+	}
+}

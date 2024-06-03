@@ -1,0 +1,7 @@
+{
+    "@@locale": "zh",
+    "contactBox": "Contact Box",
+    "contactList": "联系人列表",
+    "contactCount": "{count, plural, zero{未添加联系人} other{共 # 位联系人}}",
+    "errReadingFromSharedPreferences": "从 `shared_preferences` 读取时发生错误"
+}
