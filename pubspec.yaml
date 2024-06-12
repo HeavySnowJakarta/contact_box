@@ -52,6 +52,11 @@ dependencies:
   # SQLite storation. Store the contact data.
   sqlite3: ^2.4.0
 
+  # Temporarily used to show the ability of internationalied sorting.
+  # Currently only Chinese is supported but much more languages will be 
+  # supported later.
+  lpinyin: ^2.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
