@@ -6,6 +6,7 @@ import 'package:contact_box/core/io/sqlite.dart';
 
 // `SharedDatabase` contains some database objects which provides methods to
 // operate the `sqlite` database.
+// TODO: Finish how to share dark info
 class SharedDatabase extends InheritedWidget{
   final Future<ContactDatabaseObject> contactDatabase
     = ContactDatabaseObject.generate();

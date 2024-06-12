@@ -7,6 +7,8 @@ import 'package:azlistview/azlistview.dart';
 
 import 'package:contact_box/core/io/sqlite.dart';
 import 'package:contact_box/shared/global_objects.dart';
+import 'package:contact_box/core/io/romanization.dart';
+import 'package:contact_box/ui/colors/color.dart';
 // import 'package:contact_box/core/contact.dart';
 
 /*
@@ -23,15 +25,27 @@ import 'package:contact_box/shared/global_objects.dart';
 class _ContactListItem extends ISuspensionBean{
   String uuid;
   String name;
+  String nameR10n;
   String tagIndex; // The first letter of the _name_.
 
-  _ContactListItem(this.uuid, this.name);
+  _ContactListItem._(this.uuid, this.name, this.nameR10n, this.tagIndex);
+
+  static _ContactListItem create(uuid, name){
+    String nameR10n = romanization(name);
+    // `tag` is the first letter of `nameR10n`.
+    String tag = nameR10n.substring(0, 1).toUpperCase();
+    // See if tag ranges from A to Z. If not, set it to `#`.
+    if (RegExp("[A-Z]").hasMatch(tag)) {
+      String index = tag;
+      return _ContactListItem._(uuid, name, nameR10n, index);
+    } else {
+      String index = '#';
+      return _ContactListItem._(uuid, name, nameR10n, index);
+    }
+  }
   
   @override
-  String getSuspensionTag() {
-    // Actually I'm not clear what's this method used for. But it's required.
-    throw UnimplementedError();
-  }
+  String getSuspensionTag() => tagIndex;
 }
 
 // And this is for the select mode.
@@ -41,7 +55,23 @@ class _ContactListItem extends ISuspensionBean{
 class _ContactListItemWithSelection extends _ContactListItem{
   bool beenSelected = false;
 
-  _ContactListItemWithSelection(super.uuid, super.contact);
+  _ContactListItemWithSelection._(uuid, name, nameR10n, tagIndex):
+    super._(uuid, name, nameR10n, tagIndex);
+
+  // @override
+  static _ContactListItemWithSelection create(uuid, name){
+    String nameR10n = romanization(name);
+    // `tag` is the first letter of `nameR10n`.
+    String tag = nameR10n.substring(0, 1).toUpperCase();
+    // See if tag ranges from A to Z. If not, set it to `#`.
+    if (RegExp("[A-Z]").hasMatch(tag)) {
+      String index = tag;
+      return _ContactListItemWithSelection._(uuid, name, nameR10n, index);
+    } else {
+      String index = '#';
+      return _ContactListItemWithSelection._(uuid, name, nameR10n, index);
+    }
+  }
 }
 
 // Then let's see how an item is shown. It's done by an independent function
@@ -86,8 +116,9 @@ class ContactList extends StatefulWidget{
   }
 }
 
+// The state of the ContactList object.
 class _ContactListState extends State<ContactList>{
-  List<_ContactListItem> _contacts = [];
+  final List<_ContactListItem> _contacts = [];
   final double subItemHeight = 40;
 
   // When a contact list is initialized, it reads all the contacts from the
@@ -98,10 +129,10 @@ class _ContactListState extends State<ContactList>{
     // TODO: load data from the database.
     ContactDatabaseObject db = await SharedDatabase.of(context)!
       .contactDatabase;
-    var contacts = await db.readAllNames();
+    Map<String, String> contacts = await db.readAllNames();
     for (String uuid in contacts.keys){
       if(contacts[uuid]!=null){
-        _contacts.add(_ContactListItem(uuid, contacts[uuid]!));
+        _contacts.add(_ContactListItem.create(uuid, contacts[uuid]!));
       }
     }
 
@@ -110,9 +141,13 @@ class _ContactListState extends State<ContactList>{
 
   Future<void> _sort() async{
     if(_contacts.isEmpty) return;
-    for (int i=0; i<_contacts.length; i++){
-      // TODO: Romanization.
-    }
+
+    // Use the method to sort by A-Z.
+    SuspensionUtil.sortListBySuspensionTag(_contacts);
+    // Show sus tag.
+    SuspensionUtil.setShowSuspensionStatus(_contacts);
+
+    setState(() {});
   }
 
   // What an item of 
@@ -129,7 +164,23 @@ class _ContactListState extends State<ContactList>{
       },
 
       // Physical effect of scrolling. 
-      physics: const BouncingScrollPhysics()
+      physics: const BouncingScrollPhysics(),
+
+      // Build the susitem.
+      susItemBuilder: (context, index){
+        var model = _contacts[index];
+        if (model.getSuspensionTag() == '↑'){
+          return Container();
+        }
+
+        // Color specific things.
+
+        return Container(
+          height: subItemHeight,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.only(left: 16),
+        );
+      }
     );
   }
 }

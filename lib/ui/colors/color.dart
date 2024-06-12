@@ -33,7 +33,11 @@ abstract class ColorSetScheme{
   // Get the color value based on the color required.
   // `color`: The color required.
   // `dark`: be true for dark mode and false for light mode.
-  int getColor(ColorSet color, bool dark);
+  int getColorValue(ColorSet color, bool dark);
+
+  // Get the color object based on the color required.
+  Color getColor(ColorSet color, bool dark) =>
+    Color(getColorValue(color, dark));
 
   // Generate the color scheme based on the given seed color and whether it
   // should be dark.

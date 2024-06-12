@@ -33,7 +33,7 @@ class FlatColor extends ColorSetScheme{
   FlatColor();
 
   @override
-  int getColor(ColorSet color, bool dark){
+  int getColorValue(ColorSet color, bool dark){
     switch (dark){
       case true:
         return switch (color){
@@ -86,7 +86,7 @@ class FlatColor extends ColorSetScheme{
 
   @override
   ColorScheme getColorScheme(ColorSet color, bool dark){
-    final Color seedColor = Color(getColor(color, dark));
+    final Color seedColor = Color(getColorValue(color, dark));
     return ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: dark ? Brightness.dark : Brightness.light
